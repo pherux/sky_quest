@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Sky Quest</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="splash_activity_image_content">Sky Quest Logo</string>
+    <string name="splash_activity_tracker">Tracker</string>
+    <string name="splash_activity_monitor">Monitor</string>
+</resources>
