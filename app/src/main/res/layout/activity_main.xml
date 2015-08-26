@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="3">
 
         <ImageView
             android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/activity_main_messenger"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:background="@color/opaque"
             android:gravity="center"
@@ -35,14 +35,6 @@
 
 
     <com.gc.materialdesign.views.ButtonRectangle
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/blue_1"
-        android:text="Config" />
-
-
-    <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/activity_main_test_features"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -50,8 +42,18 @@
         android:background="@color/blue_2"
         android:text="Test features" />
 
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/activity_main_stop"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/red"
+        android:text="Stop"
+        android:visibility="gone" />
+
 
     <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/activity_main_start"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

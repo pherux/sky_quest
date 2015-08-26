@@ -1,6 +1,5 @@
 package com.pherux.skyquest.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +14,10 @@ import com.pherux.skyquest.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final Activity me = this;
     private Toolbar toolbar;
+    private boolean isStarted;
+    private ButtonRectangle startButton;
+    private ButtonRectangle stopButton;
 
     private void refreshHeartbeat() {
       /*
@@ -70,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ButtonRectangle testFeatures = (ButtonRectangle) findViewById(R.id.activity_main_test_features);
+        startButton = (ButtonRectangle) findViewById(R.id.activity_main_start);
+        stopButton = (ButtonRectangle) findViewById(R.id.activity_main_stop);
+
         testFeatures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,39 +81,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStartClicked();
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStopClicked();
+            }
+        });
+
+
         /*
-        Button start = (Button) findViewById(R.id.main_startbutton);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidClick()) {
-                    Intent name = new Intent(MainActivity.this, StartActivity.class);
-                    startActivity(name);
-                }
-            }
-        });
-
-        Button stop = (Button) findViewById(R.id.main_stopbutton);
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidClick()) {
-                    Intent name = new Intent(MainActivity.this, StopActivity.class);
-                    startActivity(name);
-                }
-            }
-        });
-
-        Button takePhoto = (Button) findViewById(R.id.main_photobutton);
-        takePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidClick()) {
-                    Intent name = new Intent(MainActivity.this, CameraActivity.class);
-                    startActivity(name);
-                }
-            }
-        });
 
         Button sendSMS = (Button) findViewById(R.id.main_smsbutton);
         sendSMS.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +142,23 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
+    }
+
+
+    private void onStartClicked() {
+        isStarted = true;
+        startButton.setVisibility(View.GONE);
+        stopButton.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, StartActivity.class);
+        startActivity(intent);
+    }
+
+    private void onStopClicked() {
+        isStarted = false;
+        startButton.setVisibility(View.VISIBLE);
+        stopButton.setVisibility(View.GONE);
+        Intent name = new Intent(MainActivity.this, StopActivity.class);
+        startActivity(name);
     }
 
     private void onTestingFeaturesClicked() {

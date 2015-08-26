@@ -12,6 +12,7 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.pherux.skyquest.App;
 import com.pherux.skyquest.Constants;
@@ -145,6 +146,7 @@ public class Utils {
                     new String[]{"su", "-c", "reboot"});
             proc.waitFor();
         } catch (Throwable ex) {
+            Toast.makeText(App.getContext(), "Device not rooted", Toast.LENGTH_LONG).show();
             Log.d(TAG, "Error attempting to reboot via su");
         }
     }

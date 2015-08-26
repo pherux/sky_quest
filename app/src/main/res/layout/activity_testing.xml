@@ -27,7 +27,7 @@
         android:background="@color/gray1" />
 
     <com.gc.materialdesign.views.ButtonRectangle
-        android:id="@+id/main_photobutton"
+        android:id="@+id/activity_testing_take_photo"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
