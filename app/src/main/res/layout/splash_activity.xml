@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -20,7 +21,8 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="20dp"
         android:onClick="onTrackerClicked"
-        android:text="@string/splash_activity_tracker" />
+        android:text="@string/splash_activity_tracker"
+        materialdesign:rippleSpeed="400" />
 
     <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/splash_activity_monitor_button"
@@ -28,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:onClick="onMonitorClicked"
-        android:text="@string/splash_activity_monitor" />
+        android:text="@string/splash_activity_monitor"
+        materialdesign:rippleSpeed="400" />
 
 </LinearLayout>
