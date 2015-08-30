@@ -19,7 +19,7 @@ import java.util.Locale;
  * Created by Fernando Valdez on 8/18/15
  */
 public class StartActivity extends Activity {
-    public static int photoIntervalSeconds = 5;
+    public static int photoIntervalSeconds = 30;
     private final Activity me = this;
 
     @Override

@@ -50,7 +50,7 @@
 
         <receiver android:name=".receivers.AlarmReceiver">
             <intent-filter>
-                <action android:name="com.pherux.skyquest.broadcast.ALARM.ALARM" />
+                <action android:name="com.pherux.skyquest.broadcast.ALARM" />
             </intent-filter>
         </receiver>
         <receiver

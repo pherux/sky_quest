@@ -1,6 +1,7 @@
 package com.pherux.skyquest.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
@@ -30,6 +31,7 @@ import java.util.Locale;
 /**
  * Created by Fernando Valdez on 8/18/15
  */
+@SuppressWarnings("deprecation")
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, Camera.PictureCallback {
 
     private static final String TAG = CameraActivity.class.getName();
@@ -71,6 +73,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         holder = surface.getHolder();
         holder.addCallback(this);
         cam = Camera.open();
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                PowerManager.FULL_WAKE_LOCK, "SkyQuestTrackerCameraActivityLock");
+        wakeLock.acquire();
     }
 
     @Override
@@ -88,7 +95,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     @Override
     protected void onDestroy() {
         Log.d("SkyQuest", "CameraActivity onDestroy");
-        //wakeLock.release();
+        wakeLock.release();
         if (cam != null) {
             cam.release();
         }
@@ -126,6 +133,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         String photoStatus = "Photo " + new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()) + " Number: " + iteration.toString();
         Utils.putStringVal(Utils.photoStatusKey, photoStatus);
 
+        pleaseWait(5);
         me.finish();
     }
 
@@ -208,13 +216,16 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     }
 
     private void takePicture() {
+        pleaseWait(2);
+        cam.takePicture(null, null, this);
+    }
+
+    private void pleaseWait(int seconds) {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000 * seconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //throw new RuntimeException();
-        cam.takePicture(null, null, this);
     }
 
     private File getOutputMediaFile() {
