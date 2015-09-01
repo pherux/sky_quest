@@ -10,6 +10,7 @@ A weather balloon tracker
 
 
 ## Coming soon:
+* Settings screen
 * Activity monitor in main screen
 * Movement detection that triggers recovery actions (Saves battery and send current location)
 * Emits sound if receive certain notification (crafted SMS or Push Notification)
@@ -17,10 +18,8 @@ A weather balloon tracker
 
 ## Screenshots
 
-Main screen
 ![Main Screen](images/main.png)
 
-Test features screen
 ![Test Screen](images/test.png)
 
 
