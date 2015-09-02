@@ -17,6 +17,7 @@ import android.view.WindowManager;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.pherux.skyquest.R;
+import com.pherux.skyquest.managers.Persistence;
 import com.pherux.skyquest.utils.Tracker;
 
 import java.io.File;
@@ -129,9 +130,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         Tracker.pingSuccess();
 
-        Integer iteration = Tracker.getIntVal(Tracker.photoCountKey, 0);
+        Integer iteration = Persistence.getIntVal(Tracker.photoCountKey, 0);
         String photoStatus = "Photo " + new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()) + " Number: " + iteration.toString();
-        Tracker.putStringVal(Tracker.photoStatusKey, photoStatus);
+        Persistence.putStringVal(Tracker.photoStatusKey, photoStatus);
 
         pleaseWait(5);
         me.finish();
@@ -240,7 +241,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         // Create a media file name
         Integer iteration = Tracker.incrementIntVal(Tracker.photoCountKey);
-        String fileName = Tracker.getStringVal(Tracker.photoPrefixKey, "SkyQuest_") + iteration.toString() + ".jpg";
+        String fileName = Persistence.getStringVal(Tracker.photoPrefixKey, "SkyQuest_") + iteration.toString() + ".jpg";
 
         File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + fileName);

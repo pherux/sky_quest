@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pherux.skyquest.SkyQuestService;
+import com.pherux.skyquest.managers.Persistence;
 import com.pherux.skyquest.receivers.AlarmReceiver;
 import com.pherux.skyquest.utils.Tracker;
 
@@ -19,7 +20,7 @@ import java.util.Locale;
  * Created by Fernando Valdez on 8/18/15
  */
 public class StartActivity extends Activity {
-    public static int photoIntervalSeconds = 30;
+    public static int photoIntervalSeconds = 15;
     private final Activity me = this;
 
     @Override
@@ -35,9 +36,9 @@ public class StartActivity extends Activity {
         m_alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, intervalMillis, intervalMillis, alarmPI);
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        Tracker.putStringVal(Tracker.photoPrefixKey, "SkyQuest_" + timeStamp + "_");
-        Tracker.putBooleanVal(Tracker.photoRunningKey, true);
-        Tracker.putIntVal(Tracker.photoCountKey, 0);
+        Persistence.putStringVal(Tracker.photoPrefixKey, "SkyQuest_" + timeStamp + "_");
+        Persistence.putBooleanVal(Tracker.photoRunningKey, true);
+        Persistence.putIntVal(Tracker.photoCountKey, 0);
 
         Intent serviceIntent = new Intent(me, SkyQuestService.class);
         me.startService(serviceIntent);

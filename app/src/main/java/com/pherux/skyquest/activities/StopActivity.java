@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pherux.skyquest.SkyQuestService;
+import com.pherux.skyquest.managers.Persistence;
 import com.pherux.skyquest.receivers.AlarmReceiver;
 import com.pherux.skyquest.utils.Tracker;
 
@@ -33,7 +34,7 @@ public class StopActivity extends Activity {
         Intent serviceIntent = new Intent(me, SkyQuestService.class);
         me.stopService(serviceIntent);
 
-        Tracker.putBooleanVal(Tracker.photoRunningKey, false);
+        Persistence.putBooleanVal(Tracker.photoRunningKey, false);
         me.finish();
     }
 

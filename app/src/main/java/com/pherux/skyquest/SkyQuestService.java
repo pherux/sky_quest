@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.pherux.skyquest.managers.Persistence;
 import com.pherux.skyquest.utils.Tracker;
 
 import java.text.DecimalFormat;
@@ -116,7 +117,7 @@ public class SkyQuestService extends Service {
             String altitude = df.format(location.getAltitude());
 
             String gpsStatus = "GPS " + new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date(location.getTime())) + " Pos: " + latitude + " / " + longitude + " / " + altitude;
-            Tracker.putStringVal(Tracker.gpsStatusKey, gpsStatus);
+            Persistence.putStringVal(Tracker.gpsStatusKey, gpsStatus);
         }
 
         @Override
