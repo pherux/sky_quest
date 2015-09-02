@@ -17,7 +17,7 @@ import android.view.WindowManager;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.pherux.skyquest.R;
-import com.pherux.skyquest.utils.Utils;
+import com.pherux.skyquest.utils.Tracker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,8 +51,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 Log.d(TAG, "CameraActivity onUncaughtException");
-                Utils.logException(ex);
-                Utils.pingError();
+                Tracker.logException(ex);
+                Tracker.pingError();
                 me.finish();
             }
         });
@@ -127,11 +127,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         // Let the android gallery know that it can show this file.
         sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(pictureFile)));
 
-        Utils.pingSuccess();
+        Tracker.pingSuccess();
 
-        Integer iteration = Utils.getIntVal(Utils.photoCountKey, 0);
+        Integer iteration = Tracker.getIntVal(Tracker.photoCountKey, 0);
         String photoStatus = "Photo " + new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()) + " Number: " + iteration.toString();
-        Utils.putStringVal(Utils.photoStatusKey, photoStatus);
+        Tracker.putStringVal(Tracker.photoStatusKey, photoStatus);
 
         pleaseWait(5);
         me.finish();
@@ -195,7 +195,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
             try {
                 params = cam.getParameters();
-                Location location = Utils.getLocation();
+                Location location = Tracker.getLocation();
                 Log.d("SkyQuest", "EXIF GPS Altitude = " + Double.toString(location.getAltitude()));
                 Log.d("SkyQuest", "EXIF GPS Latitude = " + Double.toString(location.getLatitude()));
                 Log.d("SkyQuest", "EXIF GPS Longitude = " + Double.toString(location.getLongitude()));
@@ -229,7 +229,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     }
 
     private File getOutputMediaFile() {
-        File mediaStorageDir = new File(Utils.getStorageRoot(), "Photos");
+        File mediaStorageDir = new File(Tracker.getStorageRoot(), "Photos");
 
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -239,8 +239,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         }
 
         // Create a media file name
-        Integer iteration = Utils.incrementIntVal(Utils.photoCountKey);
-        String fileName = Utils.getStringVal(Utils.photoPrefixKey, "SkyQuest_") + iteration.toString() + ".jpg";
+        Integer iteration = Tracker.incrementIntVal(Tracker.photoCountKey);
+        String fileName = Tracker.getStringVal(Tracker.photoPrefixKey, "SkyQuest_") + iteration.toString() + ".jpg";
 
         File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + fileName);

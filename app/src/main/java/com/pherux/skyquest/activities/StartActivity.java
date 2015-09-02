@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 import com.pherux.skyquest.SkyQuestService;
 import com.pherux.skyquest.receivers.AlarmReceiver;
-import com.pherux.skyquest.utils.Utils;
+import com.pherux.skyquest.utils.Tracker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,15 +29,15 @@ public class StartActivity extends Activity {
         AlarmManager m_alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent alarmIntent = new Intent(AlarmReceiver.ALARM_ACTION_NAME);
-        PendingIntent alarmPI = PendingIntent.getBroadcast(me, Utils.alarmId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent alarmPI = PendingIntent.getBroadcast(me, Tracker.alarmId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long intervalMillis = photoIntervalSeconds * 1000l;
         m_alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, intervalMillis, intervalMillis, alarmPI);
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        Utils.putStringVal(Utils.photoPrefixKey, "SkyQuest_" + timeStamp + "_");
-        Utils.putBooleanVal(Utils.photoRunningKey, true);
-        Utils.putIntVal(Utils.photoCountKey, 0);
+        Tracker.putStringVal(Tracker.photoPrefixKey, "SkyQuest_" + timeStamp + "_");
+        Tracker.putBooleanVal(Tracker.photoRunningKey, true);
+        Tracker.putIntVal(Tracker.photoCountKey, 0);
 
         Intent serviceIntent = new Intent(me, SkyQuestService.class);
         me.startService(serviceIntent);

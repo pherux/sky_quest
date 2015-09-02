@@ -22,15 +22,15 @@ public class MainActivity extends AppCompatActivity {
     private void refreshHeartbeat() {
       /*
         TextView nameText = (TextView) findViewById(R.id.main_trackernametext);
-        nameText.setText(Utils.getStringVal(Utils.trackerNameKey, ""));
+        nameText.setText(Tracker.getStringVal(Tracker.trackerNameKey, ""));
 
         TextView heartbeatText = (TextView) findViewById(R.id.main_heartbeattext);
-        String heartbeat = "Phone: " + Utils.getStringVal(Utils.pingSMSKey, "") + "\n"
-                + "URL: " + Utils.getStringVal(Utils.trackerUrlKey, "") + "\n"
-                + Utils.getStringVal(Utils.gpsStatusKey, "") + "\n"
-                + Utils.getStringVal(Utils.smsStatusKey, "") + "\n"
-                + Utils.getStringVal(Utils.trackerStatusKey, "") + "\n"
-                + Utils.getStringVal(Utils.photoStatusKey, "");
+        String heartbeat = "Phone: " + Tracker.getStringVal(Tracker.pingSMSKey, "") + "\n"
+                + "URL: " + Tracker.getStringVal(Tracker.trackerUrlKey, "") + "\n"
+                + Tracker.getStringVal(Tracker.gpsStatusKey, "") + "\n"
+                + Tracker.getStringVal(Tracker.smsStatusKey, "") + "\n"
+                + Tracker.getStringVal(Tracker.trackerStatusKey, "") + "\n"
+                + Tracker.getStringVal(Tracker.photoStatusKey, "");
 
         heartbeatText.setText(heartbeat);
         */
@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isValidClick()) {
-                    //Utils.sendLocationSMS();
-                    Utils.sendTrackerPing();
+                    //Tracker.sendLocationSMS();
+                    Tracker.sendTrackerPing();
                 }
             }
         });
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isValidClick()) {
-                    Utils.reboot();
+                    Tracker.reboot();
                 }
             }
         });
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isValidClick()) {
-                    Utils.loadConfig();
+                    Tracker.loadConfig();
                     refreshHeartbeat();
                 }
             }

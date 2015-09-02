@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.pherux.skyquest.R;
-import com.pherux.skyquest.utils.Utils;
+import com.pherux.skyquest.utils.Tracker;
 
 /**
  * Created by Fernando Valdez on 8/23/15
@@ -34,21 +34,21 @@ public class TestingActivity extends Activity {
         sendLocationWebButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.sendTrackerPing();
+                Tracker.sendTrackerPing();
             }
         });
 
         sendLocationSMSButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.sendLocationSMS();
+                Tracker.sendLocationSMS();
             }
         });
 
         rebootButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.reboot();
+                Tracker.reboot();
             }
         });
 

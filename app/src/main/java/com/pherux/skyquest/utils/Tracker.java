@@ -3,19 +3,18 @@ package com.pherux.skyquest.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.pherux.skyquest.App;
 import com.pherux.skyquest.Constants;
+import com.pherux.skyquest.managers.Persistence;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -36,9 +35,9 @@ import retrofit.client.Response;
 /**
  * Created by Fernando Valdez on 8/18/15
  */
-public class Utils {
+public class Tracker {
 
-    private static final String TAG = Utils.class.getName();
+    private static final String TAG = Tracker.class.getName();
     public static int alarmId = 314;
     public static String photoPrefixKey = "PhotoPrefix";
     public static String photoCountKey = "PhotoCount";
@@ -57,55 +56,11 @@ public class Utils {
     public static String nmeaLogFile = "skyquest.nmea.log";
     public static String configFile = "skyquest.config";
 
-    public static String getStringVal(String key,
-                                      String defValue) {
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(App.getContext());
-        return settings.getString(key, defValue);
-    }
-
-    public static void putStringVal(String key, String val) {
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(App.getContext());
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(key, val);
-        editor.apply();
-    }
-
-    public static Boolean getBooleanVal(String key,
-                                        Boolean defValue) {
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(App.getContext());
-        return settings.getBoolean(key, defValue);
-    }
-
-    public static void putBooleanVal(String key, Boolean val) {
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(App.getContext());
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(key, val);
-        editor.apply();
-    }
-
-    public static Integer getIntVal(String key,
-                                    Integer defValue) {
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(App.getContext());
-        return settings.getInt(key, defValue);
-    }
-
-    public static void putIntVal(String key, Integer val) {
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(App.getContext());
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(key, val);
-        editor.apply();
-    }
 
     public static Integer incrementIntVal(String key) {
-        Integer val = getIntVal(key, 0);
+        Integer val = Persistence.getIntVal(key, 0);
         val = val + 1;
-        putIntVal(key, val);
+        Persistence.putIntVal(key, val);
         return val;
     }
 
@@ -116,8 +71,8 @@ public class Utils {
     public static void logException(Throwable ex) {
         try {
             PrintWriter pw = new PrintWriter(
-                    new FileWriter(Utils.getStorageRoot()
-                            + "/" + Utils.errorLogFile, true));
+                    new FileWriter(Tracker.getStorageRoot()
+                            + "/" + Tracker.errorLogFile, true));
             ex.printStackTrace(pw);
             pw.flush();
             pw.close();
@@ -129,7 +84,7 @@ public class Utils {
     public static void appendToFile(String filename, String data) {
         try {
             PrintWriter pw = new PrintWriter(
-                    new FileWriter(Utils.getStorageRoot()
+                    new FileWriter(Tracker.getStorageRoot()
                             + "/" + filename, true));
             pw.print(data);
             pw.flush();
@@ -141,7 +96,7 @@ public class Utils {
 
     public static void reboot() {
         try {
-            Log.d(TAG, "Utils attempting to reboot via su");
+            Log.d(TAG, "Tracker attempting to reboot via su");
             java.lang.Process proc = Runtime.getRuntime().exec(
                     new String[]{"su", "-c", "reboot"});
             proc.waitFor();
@@ -152,13 +107,13 @@ public class Utils {
     }
 
     public static void pingSuccess() {
-        putIntVal(Utils.errorCountKey, 0);
+        Persistence.putIntVal(Tracker.errorCountKey, 0);
     }
 
     public static void pingError() {
-        Integer errorCount = incrementIntVal(Utils.errorCountKey);
+        Integer errorCount = incrementIntVal(Tracker.errorCountKey);
         if (errorCount > 5) {
-            putIntVal(Utils.errorCountKey, 0);
+            Persistence.putIntVal(Tracker.errorCountKey, 0);
             reboot();
         }
     }
@@ -196,34 +151,34 @@ public class Utils {
     }
 
     public static void sendLocationSMS() {
-        Log.d(TAG, "Utils attempting to send location SMS");
-        String phoneNumber = Utils.getStringVal(Utils.pingSMSKey, "");
-        String trackerName = Utils.getStringVal(Utils.trackerNameKey, "");
+        Log.d(TAG, "Tracker attempting to send location SMS");
+        String phoneNumber = Persistence.getStringVal(Tracker.pingSMSKey, "");
+        String trackerName = Persistence.getStringVal(Tracker.trackerNameKey, "");
         try {
             Location location = getLocation();
             SmsManager sm = SmsManager.getDefault();
-            String locationString = Utils.getLocationString(location);
-            String battString = Utils.getBatteryString();
+            String locationString = Tracker.getLocationString(location);
+            String battString = Tracker.getBatteryString();
             String smsBody = trackerName + ": " + locationString + " " + battString;
             sm.sendTextMessage(phoneNumber, null, smsBody, null, null);
-            Log.d(TAG, "Utils location SMS sent to " + phoneNumber + " : " + smsBody);
+            Log.d(TAG, "Tracker location SMS sent to " + phoneNumber + " : " + smsBody);
             String smsStatus = "SMS " + new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()) + " sent to " + phoneNumber;
-            Utils.putStringVal(Utils.smsStatusKey, smsStatus);
+            Persistence.putStringVal(Tracker.smsStatusKey, smsStatus);
         } catch (Throwable ex) {
             try {
                 SmsManager sm = SmsManager.getDefault();
                 String locationString = "Unknown location";
-                String battString = Utils.getBatteryString();
+                String battString = Tracker.getBatteryString();
                 String smsBody = trackerName + ": " + locationString + " " + battString;
                 sm.sendTextMessage(phoneNumber, null, smsBody, null, null);
             } catch (Throwable ignored) {
             }
-            Log.d(TAG, "Utils error sending location SMS");
+            Log.d(TAG, "Tracker error sending location SMS");
         }
     }
 
     public static void sendTrackerPing() {
-        Log.d(TAG, "Utils attempting to send tracker ping");
+        Log.d(TAG, "Tracker attempting to send tracker ping");
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         try {
@@ -236,7 +191,7 @@ public class Utils {
 
             App.getNetwork().getService().log(
                     Constants.MOBILE_SERVICE_PRIVATE_KEY,
-                    "battery",
+                    getBatteryString(),
                     time,
                     "" + location.getLatitude(),
                     "" + location.getLongitude(),
@@ -258,7 +213,7 @@ public class Utils {
             );
 
         } catch (Throwable ex) {
-            Log.d(TAG, "Utils error sending tracker ping");
+            Log.d(TAG, "Tracker error sending tracker ping");
         }
     }
 
@@ -294,18 +249,18 @@ public class Utils {
     public static void loadConfig() {
         //// TODO: 8/18/15 create config file
         try {
-            String configFileName = Utils.getStorageRoot() + "/" + Utils.configFile;
+            String configFileName = Tracker.getStorageRoot() + "/" + Tracker.configFile;
             BufferedReader reader = new BufferedReader(new FileReader(configFileName));
 
             String input;
             if ((input = reader.readLine()) != null) {
-                Utils.putStringVal(Utils.trackerNameKey, input);
+                Persistence.putStringVal(Tracker.trackerNameKey, input);
             }
             if ((input = reader.readLine()) != null) {
-                Utils.putStringVal(Utils.pingSMSKey, input);
+                Persistence.putStringVal(Tracker.pingSMSKey, input);
             }
             if ((input = reader.readLine()) != null) {
-                Utils.putStringVal(Utils.trackerUrlKey, input);
+                Persistence.putStringVal(Tracker.trackerUrlKey, input);
             }
             reader.close();
         } catch (Throwable ignored) {
