@@ -185,18 +185,24 @@ public class Tracker {
             Location location = getLocation();
 
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+//            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             String time = dateFormat.format(Calendar.getInstance().getTime());
+            String batteryData = getBatteryString();
+
+            Log.d(TAG, "Tracker data:\nBattery: " + batteryData + "\nTime: " + time +
+                    "\nLatitude:" + location.getLatitude() + "\nLongitude: " + location.getLongitude() +
+                    "\nAltitude: " + location.getAltitude() + "\nDevice Name: " + Utils.getDeviceName());
 
             App.getNetwork().getService().log(
                     Constants.MOBILE_SERVICE_PRIVATE_KEY,
-                    getBatteryString(),
+                    batteryData,
                     time,
                     "" + location.getLatitude(),
                     "" + location.getLongitude(),
                     "" + location.getAltitude(),
-                    "some notes",
+                    "",
+                    Utils.getDeviceName(),
                     new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
@@ -206,7 +212,7 @@ public class Tracker {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Log.e(TAG, "Error sending data to server");
+                            Log.e(TAG, "Error sending data to server:" + error.getMessage());
                             pingError();
                         }
                     }

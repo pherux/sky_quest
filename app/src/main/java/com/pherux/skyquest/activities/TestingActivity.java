@@ -2,6 +2,8 @@ package com.pherux.skyquest.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
@@ -51,7 +53,12 @@ public class TestingActivity extends Activity {
                 Tracker.reboot();
             }
         });
+    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     private void launchCamera() {

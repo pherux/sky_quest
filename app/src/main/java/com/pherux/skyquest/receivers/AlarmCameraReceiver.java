@@ -9,7 +9,7 @@ import com.pherux.skyquest.activities.CameraActivity;
 /**
  * Created by Fernando Valdez on 8/18/15
  */
-public class AlarmReceiver extends BroadcastReceiver {
+public class AlarmCameraReceiver extends BroadcastReceiver {
 
     public static final String ALARM_ACTION_NAME = "com.pherux.skyquest.broadcast.ALARM";
 

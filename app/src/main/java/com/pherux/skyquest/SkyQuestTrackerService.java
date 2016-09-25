@@ -22,11 +22,17 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.pherux.skyquest.Constants.INITIAL_DELAY_SECONDS;
+import static com.pherux.skyquest.Constants.INTERVAL_SMS_SECONDS;
+import static com.pherux.skyquest.Constants.INTERVAL_TRACKER_SECONDS;
+import static com.pherux.skyquest.Constants.USE_FEATURE_SMS;
+import static com.pherux.skyquest.Constants.USE_FEATURE_TRACKER;
+
 /**
  * Created by Fernando Valdez on 8/18/15
  */
-public class SkyQuestService extends Service {
-    private static final String TAG = SkyQuestService.class.getName();
+public class SkyQuestTrackerService extends Service {
+    private static final String TAG = SkyQuestTrackerService.class.getName();
     PowerManager.WakeLock wakeLock = null;
     LocationManager locationManager = null;
     Timer smsTimer = null;
@@ -58,20 +64,28 @@ public class SkyQuestService extends Service {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 150, 0, noopListener);
         locationManager.addNmeaListener(nmeaListener);
-        smsTimer = new Timer();
-        smsTimer.schedule(new SMSTimerTask(), 5000, 60 * 1000);
-        trackerTimer = new Timer();
-        trackerTimer.schedule(new TrackerTimerTask(), 8000, 20 * 1000);
-        return 0;
+        if (USE_FEATURE_SMS) {
+            smsTimer = new Timer();
+            smsTimer.schedule(new SMSTimerTask(), INITIAL_DELAY_SECONDS * 1000, INTERVAL_SMS_SECONDS * 1000);
+        }
+        if (USE_FEATURE_TRACKER) {
+            trackerTimer = new Timer();
+            trackerTimer.schedule(new TrackerTimerTask(), INITIAL_DELAY_SECONDS * 1000, INTERVAL_TRACKER_SECONDS * 1000);
+        }
+        return START_STICKY_COMPATIBILITY;
     }
 
     @Override
     public void onDestroy() {
         Log.d(TAG, "Stopping Service");
-        smsTimer.cancel();
-        smsTimer.purge();
-        trackerTimer.cancel();
-        trackerTimer.purge();
+        if (USE_FEATURE_SMS) {
+            smsTimer.cancel();
+            smsTimer.purge();
+        }
+        if (USE_FEATURE_TRACKER) {
+            trackerTimer.cancel();
+            trackerTimer.purge();
+        }
         locationManager.removeUpdates(noopListener);
         locationManager.removeNmeaListener(nmeaListener);
         wakeLock.release();
@@ -108,7 +122,7 @@ public class SkyQuestService extends Service {
 
         @Override
         public void onLocationChanged(Location location) {
-            Log.d(TAG, "NoopLocationListener onLocationChanged");
+//            Log.d(TAG, "NoopLocationListener onLocationChanged");
 
             DecimalFormat df = new DecimalFormat("#.########");
             String latitude = df.format(location.getLatitude());

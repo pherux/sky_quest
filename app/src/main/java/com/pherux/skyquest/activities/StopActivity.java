@@ -7,9 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.pherux.skyquest.SkyQuestService;
+import com.pherux.skyquest.SkyQuestTrackerService;
 import com.pherux.skyquest.managers.Persistence;
-import com.pherux.skyquest.receivers.AlarmReceiver;
+import com.pherux.skyquest.receivers.AlarmCameraReceiver;
 import com.pherux.skyquest.utils.Tracker;
 
 /**
@@ -27,11 +27,11 @@ public class StopActivity extends Activity {
         AlarmManager m_alarmMgr;
 
         m_alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(AlarmReceiver.ALARM_ACTION_NAME);
+        Intent alarmIntent = new Intent(AlarmCameraReceiver.ALARM_ACTION_NAME);
         PendingIntent alarmPI = PendingIntent.getBroadcast(me, Tracker.alarmId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         m_alarmMgr.cancel(alarmPI);
 
-        Intent serviceIntent = new Intent(me, SkyQuestService.class);
+        Intent serviceIntent = new Intent(me, SkyQuestTrackerService.class);
         me.stopService(serviceIntent);
 
         Persistence.putBooleanVal(Tracker.photoRunningKey, false);

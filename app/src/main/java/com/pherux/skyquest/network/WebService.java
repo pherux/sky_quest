@@ -20,5 +20,6 @@ public interface WebService {
             @Query("lon") String lon,
             @Query("alt") String alt,
             @Query("notes") String notes,
+            @Query("id") String id,
             Callback<Response> cb);
 }

@@ -3,6 +3,8 @@ package com.pherux.skyquest.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.location.Location;
@@ -79,6 +81,12 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
                 PowerManager.FULL_WAKE_LOCK, "SkyQuestTrackerCameraActivityLock");
         wakeLock.acquire();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
