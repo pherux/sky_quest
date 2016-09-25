@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash_background"
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
-        android:text="Test Features"
+        android:text="@string/test_features"
         android:textColor="@color/gray1"
         android:textSize="20sp" />
 
@@ -32,7 +33,8 @@
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="40dp"
-        android:text="Take Photo" />
+        android:text="@string/take_photo"
+        materialdesign:rippleSpeed="400" />
 
     <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/activity_testing_location_web"
@@ -40,7 +42,8 @@
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="40dp"
-        android:text="Send Location to Web" />
+        android:text="@string/send_location_to_web"
+        materialdesign:rippleSpeed="400" />
 
     <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/activity_testing_location_sms"
@@ -48,7 +51,8 @@
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="40dp"
-        android:text="Send Location to SMS" />
+        android:text="@string/send_location_to_sms"
+        materialdesign:rippleSpeed="400" />
 
 
     <com.gc.materialdesign.views.ButtonRectangle
@@ -57,6 +61,7 @@
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
-        android:text="Reboot (only root)" />
+        android:text="@string/reboot_only_root"
+        materialdesign:rippleSpeed="400" />
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.pherux.skyquest.App;
 import com.pherux.skyquest.SkyQuestTrackerService;
 import com.pherux.skyquest.managers.Persistence;
 import com.pherux.skyquest.receivers.AlarmCameraReceiver;
@@ -17,7 +18,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import static com.pherux.skyquest.Constants.INTERVAL_PHOTO_SECONDS;
-import static com.pherux.skyquest.Constants.USE_FEATURE_PHOTOS;
 
 /**
  * Created by Fernando Valdez on 8/18/15
@@ -30,7 +30,7 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (USE_FEATURE_PHOTOS) {
+        if (App.useCameraTracking()) {
             AlarmManager m_alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent alarmIntent = new Intent(AlarmCameraReceiver.ALARM_ACTION_NAME);
             PendingIntent alarmPI = PendingIntent.getBroadcast(me, Tracker.alarmId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);

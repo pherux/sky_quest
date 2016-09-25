@@ -2,11 +2,11 @@ package com.pherux.skyquest.utils;
 
 import android.os.Build;
 
-class Utils {
+public class Utils {
 
     private static String deviceName;
 
-    static String getDeviceName() {
+    public static String getDeviceName() {
         if (deviceName != null) {
             return deviceName;
         } else {

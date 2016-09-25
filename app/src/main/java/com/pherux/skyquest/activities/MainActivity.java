@@ -1,9 +1,13 @@
 package com.pherux.skyquest.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,7 +20,6 @@ import com.pherux.skyquest.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private boolean isStarted;
     private ButtonRectangle startButton;
     private ButtonRectangle stopButton;
@@ -36,10 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
         heartbeatText.setText(heartbeat);
         */
-    }
-
-    private Boolean isValidClick() {
-        return true;
     }
 
     @Override
@@ -68,14 +67,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSettings() {
-        Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
         ButtonRectangle testFeatures = (ButtonRectangle) findViewById(R.id.activity_main_test_features);
@@ -104,61 +105,55 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        /*
-
-        Button sendSMS = (Button) findViewById(R.id.main_smsbutton);
-        sendSMS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidClick()) {
-                    //Tracker.sendLocationSMS();
-                    Tracker.sendTrackerPing();
-                }
-            }
-        });
-
-        Button reboot = (Button) findViewById(R.id.main_rebootbutton);
-        reboot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidClick()) {
-                    Tracker.reboot();
-                }
-            }
-        });
-
-        Button quit = (Button) findViewById(R.id.main_quitbutton);
-        quit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidClick()) {
-                    me.finish();
-                }
-            }
-        });
-
-
-        Button loadConfig = (Button) findViewById(R.id.main_configreload);
-        loadConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidClick()) {
-                    Tracker.loadConfig();
-                    refreshHeartbeat();
-                }
-            }
-        });
-        */
-
     }
 
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permissions granted! Enjoy the launching.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Application will not work until ALL permissions are granted", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
 
     private void onStartClicked() {
-        isStarted = true;
-        startButton.setVisibility(View.GONE);
-        stopButton.setVisibility(View.VISIBLE);
-        Intent intent = new Intent(this, StartActivity.class);
-        startActivity(intent);
+        if (checkPermissions()) {
+            isStarted = true;
+            startButton.setVisibility(View.GONE);
+            stopButton.setVisibility(View.VISIBLE);
+            Intent intent = new Intent(this, StartActivity.class);
+            startActivity(intent);
+        } else {
+            requestPermissions();
+        }
+    }
+
+    private boolean checkPermissions() {
+        boolean hasMissingPermissions = false;
+        if (this.checkCallingOrSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            hasMissingPermissions = true;
+        }
+        if (this.checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            hasMissingPermissions = true;
+        }
+        if (this.checkCallingOrSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            hasMissingPermissions = true;
+        }
+        if (this.checkCallingOrSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            hasMissingPermissions = true;
+        }
+        if (this.checkCallingOrSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
+            hasMissingPermissions = true;
+        }
+        if (this.checkCallingOrSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
+            hasMissingPermissions = true;
+        }
+
+        return !hasMissingPermissions;
     }
 
     private void onStopClicked() {
@@ -169,10 +164,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity(name);
     }
 
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.WAKE_LOCK,
+                Manifest.permission.RECEIVE_BOOT_COMPLETED}, 1);
+    }
+
     private void onTestingFeaturesClicked() {
-        Intent intent = new Intent(this, TestingActivity.class);
-        startActivity(intent);
-        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        if (checkPermissions()) {
+            Intent intent = new Intent(this, TestingActivity.class);
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else {
+            requestPermissions();
+        }
     }
 
     @Override

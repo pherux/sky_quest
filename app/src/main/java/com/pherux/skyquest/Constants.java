@@ -12,7 +12,7 @@ public class Constants {
     public static final int INITIAL_DELAY_SECONDS = 5;
     public static final int INTERVAL_PHOTO_SECONDS = 60;
     public static final int INTERVAL_SMS_SECONDS = 60;
-    public static final int INTERVAL_TRACKER_SECONDS = 10;
+    public static final int INTERVAL_TRACKER_SECONDS = 15;
 
     public static final boolean USE_FEATURE_SMS = false;
     public static final boolean USE_FEATURE_PHOTOS = true;
