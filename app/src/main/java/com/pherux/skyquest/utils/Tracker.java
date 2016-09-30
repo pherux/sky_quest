@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -139,15 +138,21 @@ public class Tracker {
     public static Location getLocation() {
         LocationManager locationManager = (LocationManager) App.getContext()
                 .getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location == null) {
-            location = new Location("reverseGeocoded");
-            location.setAltitude(0);
-            location.setLatitude(0);
-            location.setLongitude(0);
+
+        try {
+            Location location = locationManager
+                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location == null) {
+                location = new Location("reverseGeocoded");
+                location.setAltitude(0);
+                location.setLatitude(0);
+                location.setLongitude(0);
+            }
+            return location;
+        } catch (SecurityException e) {
+            Log.d(TAG, "Error getting location: " + e.getMessage());
+            return new Location("reverseGeocoded");
         }
-        return location;
     }
 
     public static void sendLocationSMS() {
